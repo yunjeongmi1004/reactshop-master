@@ -5,10 +5,11 @@ import data from './data';
 import { useState } from 'react';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import Detail from './routes/Detail';
+import axios from 'axios';
 
 function App() {
 
-  let [shoes] = useState(data);
+  let [shoes, setShoes] = useState(data);
   let navigate = useNavigate(); /*  use로 시작되는것은 훅이다 */
   return (
     <div className="App">
@@ -23,6 +24,7 @@ function App() {
             <Nav.Link onClick={()=>{ navigate(-1)}}>홈</Nav.Link>
             <Nav.Link onClick={()=>{ navigate('/detail')}}>상세페이지</Nav.Link>
           </Nav>
+
         </Container>
       </Navbar>
 
@@ -38,7 +40,41 @@ function App() {
               )
             })}
           </div>
+            <button onClick={()=>{
+              axios.get('https://codingapple1.github.io/shop/data2.json')
+              .then((결과)=>{
+                console.log(결과.data)
+                console.log(shoes)
+
+                let copy = [...shoes, ...결과.data];
+                setShoes(copy);
+              })
+              .catch(()=>{
+                console.log('실패함')//ajax 요청 실패할 경우 catch
+              })
+
+              // axios.post('/url', {name : 'kim'})//서버로 데이터 전송하는 post
+              
+              // Promise.all([axios.get('/url2'), axios.get('/url3')])
+              // .then(()=>{
+              //   //동시에 ajax요청 여러개 하려면
+              //   "{"name" : "kim"}" // 따옴표 쳐놓으면 array, object도 주고받기 가능 : 일명 json
+              // })
+
+              // fetch('url')
+              // .then(결과 => 결과.json())
+              // .then(data=>{}) // axios 외부 라이브러리와 다르게 json을 array/object 변환과정이 필요하기때문
+
+
+            }}>더보기</button>
+
+            {/* ajax 쓰려면 옵션 3개중 택 1 
+            1. XMLHttpRequest
+            2. fetch()
+            3. axios 같은거 
+            리액트에서는 거의 서버와 ajax 이용해서 통신합니다. */}
           </>
+          
         } />
         <Route path="/detail/:id" element={<Detail shoes={shoes}></Detail>} />
         {/* :id = url 파라미터 라 명명함 잘 기억해 둘것 코딩애플 선생님이 말하심!! */}
@@ -81,3 +117,9 @@ function Card(props){
   )
 }
 export default App;
+
+// 240723 : ajax 
+// 서버 : 부탁하면 진짜로 들어주는 프로그램
+// 서버 개발시 짜는 코드 : 누가 a요청하면 a보내주세요
+// 1. 방법 (GET:데이터가져올때/POST:데이터보낼때) / 2. 어떤자료(URL:서버만든사람한테 물어보면됩니다) 적어보내라
+// 나 (GET요청 comic.naver.com) ---> <----- 네이버웹툰서버 (웹툰)

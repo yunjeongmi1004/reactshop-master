@@ -4,7 +4,7 @@ import styled, { isStyledComponent } from 'styled-components';
 
 let YellowBtn = styled.button`
     background : ${ props => props.bg };
-    color : ${ props => props.bg == 'blue' ? 'white' : 'black' };;
+    color : ${ props => props.bg == 'blue' ? 'white' : 'black' };
     padding:10px;
 `
 // let NewBtn = styled.button(YellowBtn)`
@@ -50,23 +50,35 @@ function Detail(props){
     // mount, update시 코드 실행해주는 useEffect
     // useEffect 쓰는 이유 : html 렌더링 후에 동작합니다 - 시간이 오래 걸리는 어려운 연산 / 서버에서 데이터 가져오는 작업 / 타이머 장착하는거 사용합니다
     useEffect(()=>{
-        // console.log('안녕');
-        // for(var i = 0; i < 10000 ; i++){
-        //     console.log(1)
-        // }
+        console.log(1);
+        setTimeout(()=>{setalert(false)}, 2000)
+    }, [count])
 
-        setTimeout(()=>{
+    useEffect(()=>{
+        setTimeout(()=>{setalert(false)}, 2000)
+        console.log(2);
+    }, []) // 컴포넌트 mount시 1회만 실행하고 싶으면 이렇게
 
-            
-setalert(false)
-        }, 2000)
-    })
+    useEffect(()=>{
+        console.log(3);
+        let a = setTimeout(()=>{setalert(false)}, 2000)
+        
+        //clean up function : mount시 실행안됨, unmount시 실행됨
+        return ()=>{
+            console.log(33);
+            clearTimeout(a) //기존 타이머는 제거해주세요~~
+        }
+    }, []) // useEffect 동작 전에 실행되는 return()=>{}
 
-    // for(var i = 0; i < 10000 ; i++){
-    //     console.log(1)
-    // }
 
-
+        //빡통식 정리시간 
+        // useEffect(()=>{}) //1. 재렌더링마다 코드 실행하고 싶으면
+        // useEffect(()=>{},[]) //2. mount 시 1회 코드실행하고싶으면
+        // useEffect(()=>{
+        //     return()=>{
+        //     } //3. unmount시 1회 코드 실행하고 싶으면
+        // },[]) 
+        // useEffect(()=>{},[count]) //4. 특정  state 변경시에만 실행하려면 [state명]
             
     return(
         <div className="container">

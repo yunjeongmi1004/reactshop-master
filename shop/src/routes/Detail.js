@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled, { isStyledComponent } from 'styled-components';
+import {Nav} from 'react-bootstrap';
+
 
 let YellowBtn = styled.button`
     background : ${ props => props.bg };
@@ -29,7 +31,17 @@ let YellowBtn = styled.button`
 function Detail(props){
 
 
+    let [fade2, setFade2] = useState('')
+    useEffect(()=>{
+        let a = setTimeout(()=>{
+            setFade2('end')
+        }, 100)
 
+        return ()=>{
+            clearTimeout(a)
+            setFade2('') 
+        }
+    }, []) 
 
 
     let [count, setCount] = useState(0);
@@ -46,6 +58,7 @@ function Detail(props){
     let 찾은상품 =  props.shoes.find((x) => x.id == id )
 
     let [alert, setalert] = useState(true);
+    let [탭, 탭변경] = useState(0);
     
     // mount, update시 코드 실행해주는 useEffect
     // useEffect 쓰는 이유 : html 렌더링 후에 동작합니다 - 시간이 오래 걸리는 어려운 연산 / 서버에서 데이터 가져오는 작업 / 타이머 장착하는거 사용합니다
@@ -81,7 +94,7 @@ function Detail(props){
         // useEffect(()=>{},[count]) //4. 특정  state 변경시에만 실행하려면 [state명]
             
     return(
-        <div className="container">
+        <div className={'container start ' + fade2}>
             {
                 alert == true
                 ? <div className="alert alert-warning">
@@ -112,8 +125,72 @@ function Detail(props){
                 <button className="btn btn-danger">주문하기</button> 
                 </div>
             </div>
+
+    
+
+            <Nav variant="tabs"  defaultActiveKey="link0">
+                <Nav.Item>
+                    <Nav.Link onClick={()=>{탭변경(0)}} eventKey="link0">버튼0</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link onClick={()=>{탭변경(1)}} eventKey="link1">버튼1</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link onClick={()=>{탭변경(2)}} eventKey="link2">버튼2</Nav.Link>
+                </Nav.Item>
+            </Nav>
+            <TabContent2 shoes={props.shoes} 탭 = {탭}/>
+
         </div> 
     )
 }
+
+function TabContent(props){
+    if(props.탭 == 0){
+        return <div>내용0</div>
+    }
+    else if(props.탭 == 1){
+        return <div>내용1</div>
+    }
+    else if(props.탭 == 2){
+        return <div>내용2</div>
+    }
+}
+
+// props어쩌구가 귀찮다면 ~ 
+function TabContent2({탭, shoes}){
+    // if(탭 == 0){
+    //     return <div>내용0</div>
+    // }
+    // else if(탭 == 1){
+    //     return <div>내용1</div>
+    // }
+    // else if(탭 == 2){
+    //     return <div>내용2</div>
+    // }
+
+    let [fade, setFade] = useState('')
+
+    // 리액트의 automatic batching 기능
+    useEffect(()=>{
+        let a = setTimeout(()=>{
+            setFade('end')
+        }, 100)
+
+        return ()=>{
+            clearTimeout(a)
+            setFade('') 
+        }
+    }, [탭]) // 탭이라는게 변경될 때마다 안의 코드를 실행해줌
+
+    //센스 좋은 방법
+    return( 
+    <div className={'start ' + fade}>
+        {[<div>{shoes[0].title}</div>,<div>내용1</div>,<div>내용2</div>][탭]}
+    </div>
+    )
+}
+
+
 
 export default Detail;

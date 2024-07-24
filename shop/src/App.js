@@ -2,15 +2,17 @@ import './App.css';
 import {Container, Nav, Navbar} from 'react-bootstrap';
 import bg from './bg.png'
 import data from './data';
-import { useState } from 'react';
+import { createContext, useState } from 'react';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import Detail from './routes/Detail';
 import axios from 'axios';
+
 
 function App() {
 
   let [shoes, setShoes] = useState(data);
   let navigate = useNavigate(); /*  use로 시작되는것은 훅이다 */
+
   return (
     <div className="App">
 
@@ -76,7 +78,12 @@ function App() {
           </>
           
         } />
-        <Route path="/detail/:id" element={<Detail shoes={shoes}></Detail>} />
+        <Route path="/detail/:id" element={
+         
+            <Detail shoes={shoes}></Detail>
+     
+          } 
+        />
         {/* :id = url 파라미터 라 명명함 잘 기억해 둘것 코딩애플 선생님이 말하심!! */}
         
         
@@ -118,8 +125,15 @@ function Card(props){
 }
 export default App;
 
+
 // 240723 : ajax 
 // 서버 : 부탁하면 진짜로 들어주는 프로그램
 // 서버 개발시 짜는 코드 : 누가 a요청하면 a보내주세요
 // 1. 방법 (GET:데이터가져올때/POST:데이터보낼때) / 2. 어떤자료(URL:서버만든사람한테 물어보면됩니다) 적어보내라
 // 나 (GET요청 comic.naver.com) ---> <----- 네이버웹툰서버 (웹툰)
+
+
+// 240724 : Context API 단점
+// 1. state 변경시 쓸데없는 컴포넌트까지 전부 재렌더링
+// 2. useContext() 를 쓰고 있는 컴포넌트는 나중에 다른 파일에서 재사용할 때 Context를 import하는게 귀찮아 질 수 있음
+// 그래서 이것 보다는 redux 같은 외부라이브러리를 많이들 사용함

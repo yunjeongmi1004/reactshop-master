@@ -5,6 +5,7 @@ import data from './data';
 import { createContext, useState } from 'react';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import Detail from './routes/Detail';
+import Cart from './routes/Cart';
 import axios from 'axios';
 
 
@@ -86,6 +87,11 @@ function App() {
         />
         {/* :id = url 파라미터 라 명명함 잘 기억해 둘것 코딩애플 선생님이 말하심!! */}
         
+
+        <Route path="/cart" element={
+          <Cart></Cart>
+        } 
+        />
         
         {/* 3.Nested Routes 문법 : 장점 ROUTE가 간략해짐, 여러 유사한 페이지가 필요할때 사용함 */}
         <Route path="/about" element={<About></About>}>

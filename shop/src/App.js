@@ -2,7 +2,7 @@ import './App.css';
 import {Container, Nav, Navbar} from 'react-bootstrap';
 import bg from './bg.png'
 import data from './data';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import Detail from './routes/Detail';
 import Cart from './routes/Cart';
@@ -10,6 +10,26 @@ import axios from 'axios';
 
 
 function App() {
+
+
+  useEffect(()=>{
+    localStorage.setItem('watched', JSON.stringify([]))
+  }, [])
+  // localStorage = 문자만 저장 가능, 숫자 넣어도 문자로 저장됨
+  // 데이터입력
+  // localStorage.setItem('age','20');
+
+  // 데이터출력
+  // localStorage.getItem('age')
+
+  // 데이터삭제
+  // localStorage.removeItem('age')
+  // array/object 저장하려면 json으로 바꾸면 됩니다 
+  let obj = {name : 'kim'};
+  localStorage.setItem('data', JSON.stringify(obj));
+  let 꺼낸거 = localStorage.getItem('data');
+  console.log( JSON.parse(꺼낸거).name)
+
 
   let [shoes, setShoes] = useState(data);
   let navigate = useNavigate(); /*  use로 시작되는것은 훅이다 */

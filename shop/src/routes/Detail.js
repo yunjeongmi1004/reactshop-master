@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled, { isStyledComponent } from 'styled-components';
 import {Nav} from 'react-bootstrap';
+import { addItem } from './../store';
+import { useDispatch } from "react-redux";
 
 
 let YellowBtn = styled.button`
@@ -59,6 +61,8 @@ function Detail(props){
 
     let [alert, setalert] = useState(true);
     let [탭, 탭변경] = useState(0);
+    let dispatch = useDispatch();
+
     
     // mount, update시 코드 실행해주는 useEffect
     // useEffect 쓰는 이유 : html 렌더링 후에 동작합니다 - 시간이 오래 걸리는 어려운 연산 / 서버에서 데이터 가져오는 작업 / 타이머 장착하는거 사용합니다
@@ -122,7 +126,10 @@ function Detail(props){
                 <h4 className="pt-5">{찾은상품.title}</h4>
                 <p>{찾은상품.content}</p>
                 <p>{찾은상품.price}</p>
-                <button className="btn btn-danger">주문하기</button> 
+                <button className="btn btn-danger" 
+                onClick={()=>{
+                    dispatch(addItem({id : 1, name : 'Red Knit', count : 1},))
+                }}>주문하기</button> 
                 </div>
             </div>
 

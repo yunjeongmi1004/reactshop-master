@@ -2,12 +2,19 @@ import './App.css';
 import {Container, Nav, Navbar} from 'react-bootstrap';
 import bg from './bg.png'
 import data from './data';
-import { createContext, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
-import Detail from './routes/Detail';
-import Cart from './routes/Cart';
+// import Detail from './routes/Detail';
+// import Cart from './routes/Cart';
 import axios from 'axios';
 import {useQuery} from "react-query"
+
+
+// 메인페이지 로딩시 필요 없는 파일은 lazy 하게 로딩해주세요
+const Detail = lazy(() => import('./routes/Detail.js'));
+const Cart = lazy(() => import('./routes/Cart.js'));
+
+
 
 
 function App() {
@@ -66,8 +73,9 @@ function App() {
 
         </Container>
       </Navbar>
-
-
+      
+      {/* 로딩속도 개선 lazy */}
+      <Suspense fallback={<div>로딩중임</div>}> 
       <Routes>
         <Route path="/" element={
           <>
@@ -116,9 +124,9 @@ function App() {
           
         } />
         <Route path="/detail/:id" element={
-         
-            <Detail shoes={shoes}></Detail>
-     
+            
+              <Detail shoes={shoes}></Detail>
+          
           } 
         />
         {/* :id = url 파라미터 라 명명함 잘 기억해 둘것 코딩애플 선생님이 말하심!! */}
@@ -138,7 +146,7 @@ function App() {
         <Route path="*" element={<div>없는 페이지에용 404</div>} />
        
       </Routes>
-
+      </Suspense>
 
 
 

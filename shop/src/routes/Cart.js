@@ -1,7 +1,11 @@
+import { useState, useTransition, useDeferredValue } from "react";
 import {Table} from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import {changeName, increase} from './../store/userSlice';
 import { addCount } from './../store';
+
+
+let c = new Array(10000).fill(0)
 
 
 function Cart(){
@@ -17,8 +21,27 @@ function Cart(){
     // 데이터 방대한 프로젝트의 경우에는 Redux 사용
     // Redux store 안에 모든걸 넣지 않아도 됩니다
 
+
+    let [name, setName] = useState('');
+    let [isPending, startTransition] = useTransition()
+    let state2 = useDeferredValue(name)
+    
     return(
         <div>
+            <input onChange={(e)=>{ 
+                startTransition(()=>{
+                    // 코드시작을 뒤로 늦쳐줌
+                    setName(e.target.value)
+                })
+            
+            }} />
+            {
+                isPending ?  '로딩중' : 
+                c.map(()=>{
+                    // return <div>{name}</div>
+                    return <div>{state2}</div>
+                })
+            }
             {state.user.name}{state.user.age}의 장바구니
 
             <button onClick={()=>{

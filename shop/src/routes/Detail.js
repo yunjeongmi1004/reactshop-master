@@ -4,7 +4,8 @@ import styled, { isStyledComponent } from 'styled-components';
 import {Nav} from 'react-bootstrap';
 import { addItem } from './../store';
 import { useDispatch } from "react-redux";
-
+import { useLike } from "../hooks/like.js";
+import { useUsername } from "../hooks/username.js";
 
 let YellowBtn = styled.button`
     background : ${ props => props.bg };
@@ -32,6 +33,12 @@ let YellowBtn = styled.button`
 
 function Detail(props){
 
+
+    let [like, addLike] = useLike();
+
+    let [username] =  useUsername();
+    console.log(username)
+ 
 
     let [fade2, setFade2] = useState('')
     useEffect(()=>{
@@ -107,7 +114,14 @@ function Detail(props){
         //     } //3. unmount시 1회 코드 실행하고 싶으면
         // },[]) 
         // useEffect(()=>{},[count]) //4. 특정  state 변경시에만 실행하려면 [state명]
-            
+    
+        
+
+    // let[like, setLike] = useState(0);
+    // function addLike(){
+    //     setLike(a => a + 1)
+    // }
+
     return(
         <div className={'container start ' + fade2}>
             {
@@ -126,21 +140,25 @@ function Detail(props){
 
             <div className="row">
                 <div className="col-md-6">
-                <img src="https://codingapple1.github.io/shop/shoes1.jpg" width="100%" />
+                    <img src="https://codingapple1.github.io/shop/shoes1.jpg" width="100%" />
                 </div>
                 <div className="col-md-6">
-                {/* <h4 className="pt-5">{props.shoes[현재url에입력한숫자].title}</h4> */}
-                {/* <h4 className="pt-5">{props.shoes[id].title}</h4>
-                <p>{props.shoes[id].content}</p>
-                <p>{props.shoes[id].price}</p> */}
+                    <div>{username}</div>
+                
+                    {like} <span onClick={() => {addLike()}}>♥</span>
 
-                <h4 className="pt-5">{찾은상품.title}</h4>
-                <p>{찾은상품.content}</p>
-                <p>{찾은상품.price}</p>
-                <button className="btn btn-danger" 
-                onClick={()=>{
-                    dispatch(addItem({id : 1, name : 'Red Knit', count : 1},))
-                }}>주문하기</button> 
+                    {/* <h4 className="pt-5">{props.shoes[현재url에입력한숫자].title}</h4> */}
+                    {/* <h4 className="pt-5">{props.shoes[id].title}</h4>
+                    <p>{props.shoes[id].content}</p>
+                    <p>{props.shoes[id].price}</p> */}
+
+                    <h4 className="pt-5">{찾은상품.title}</h4>
+                    <p>{찾은상품.content}</p>
+                    <p>{찾은상품.price}</p>
+                    <button className="btn btn-danger" 
+                    onClick={()=>{
+                        dispatch(addItem({id : 1, name : 'Red Knit', count : 1},))
+                    }}>주문하기</button> 
                 </div>
             </div>
 
